@@ -1,5 +1,6 @@
 package com.lifeos.student.entity;
 
+import java.util.List;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -47,6 +48,26 @@ public class User {
 
     @Column(length = 500)
     private String bio;
+
+    @OneToMany(mappedBy = "user",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true)
+    private List<Subject> subjects;
+
+    @OneToMany(mappedBy = "user",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true)
+    private List<Task> tasks;
+
+    @OneToMany(mappedBy = "user",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true)
+    private List<CalenderEvent> calendarEvents;
+
+    @OneToMany(mappedBy = "user",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true)
+    private List<Document> documents;
 
     private LocalDateTime createdAt;
 

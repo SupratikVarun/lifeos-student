@@ -1,5 +1,6 @@
 package com.lifeos.student.service;
 
+import com.lifeos.student.entity.User;
 import com.lifeos.student.dto.UpdateProfileDTO;
 import com.lifeos.student.dto.UserProfileDTO;
 import com.lifeos.student.entity.User;
@@ -13,6 +14,12 @@ public class UserService {
 
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
+    }
+
+    public User getCurrentUser(String collegeEmail) {
+
+        return userRepository.findByCollegeEmail(collegeEmail)
+                .orElseThrow(() -> new RuntimeException("User not found"));
     }
 
     public UserProfileDTO getProfile(String collegeEmail) {
