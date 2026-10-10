@@ -24,9 +24,11 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<AuthResponseDTO> handleException(Exception ex) {
 
+        ex.printStackTrace();
+
         AuthResponseDTO response = new AuthResponseDTO(
                 false,
-                "Something went wrong.",
+                ex.getMessage(),
                 null
         );
 

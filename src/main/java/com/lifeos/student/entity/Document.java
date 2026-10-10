@@ -28,6 +28,10 @@ public class Document {
     @Column(nullable = false)
     private Long fileSize;
 
+
+    @Column(columnDefinition = "TEXT")
+    private String extractedText;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "student_id", nullable = false)
     private User user;

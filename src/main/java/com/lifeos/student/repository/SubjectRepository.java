@@ -11,4 +11,9 @@ public interface SubjectRepository extends JpaRepository<Subject, UUID> {
 
     List<Subject> findByUser(User user);
 
+    List<Subject> findByUserAndSubjectNameContainingIgnoreCase(
+            User user,
+            String subjectName
+    );
+
 }

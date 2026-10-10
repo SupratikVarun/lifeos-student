@@ -13,4 +13,14 @@ public interface DocumentRepository extends JpaRepository<Document, UUID> {
     List<Document> findByUser(User user);
 
     Optional<Document> findByIdAndUser(UUID id, User user);
+
+    List<Document> findByUserAndFileNameContainingIgnoreCase(
+            User user,
+            String fileName
+    );
+
+    List<Document> findByUserAndExtractedTextContainingIgnoreCase(
+            User user,
+            String extractedText
+    );
 }

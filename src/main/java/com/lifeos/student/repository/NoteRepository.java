@@ -13,4 +13,14 @@ public interface NoteRepository extends JpaRepository<Note, UUID> {
     List<Note> findByUser(User user);
 
     List<Note> findBySubject(Subject subject);
+
+    List<Note> findByUserAndTitleContainingIgnoreCase(
+            User user,
+            String title
+    );
+
+    List<Note> findByUserAndContentContainingIgnoreCase(
+            User user,
+            String content
+    );
 }

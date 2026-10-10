@@ -5,6 +5,8 @@ import com.lifeos.student.dto.DocumentResponseDTO;
 import com.lifeos.student.service.DocumentService;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.http.MediaType;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.UUID;
@@ -19,17 +21,16 @@ public class DocumentController {
         this.documentService = documentService;
     }
 
-    @PostMapping
-    public DocumentResponseDTO addDocument(
-            @RequestBody AddDocumentDTO request,
+    @PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public DocumentResponseDTO uploadDocument(
+            @RequestParam("file") MultipartFile file,
             Authentication authentication) {
 
-        return documentService.addDocument(
-                request,
+        return documentService.uploadDocument(
+                file,
                 authentication.getName()
         );
     }
-
     @GetMapping
     public List<DocumentResponseDTO> getAllDocuments(
             Authentication authentication) {
