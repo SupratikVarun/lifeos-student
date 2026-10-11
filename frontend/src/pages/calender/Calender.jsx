@@ -12,9 +12,9 @@ import {
   createEvent,
   updateEvent,
   deleteEvent,
-} from "../../services/calendarService";
+} from "../../services/calenderService";
 
-export default function Calendar() {
+export default function Calender() {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
 
