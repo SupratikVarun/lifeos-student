@@ -1,14 +1,10 @@
 services:
   - type: web
     name: lifeos-student-backend
-    env: java
+    runtime: docker
     plan: free
     region: singapore
-    buildCommand: ./mvnw clean package -DskipTests
-    startCommand: java -Dserver.port=$PORT -jar target/lifeos-student-backend-0.0.1-SNAPSHOT.jar
     envVars:
-      - key: JAVA_VERSION
-        value: 21
       - key: SPRING_DATASOURCE_URL
         value: jdbc:postgresql://ep-lingering-hall-b322ohgn.c-4.ap-southeast-1.aws.neon.tech/neondb?sslmode=require&channelBinding=require
       - key: SPRING_DATASOURCE_USERNAME
