@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/calendar")
+@RequestMapping("/api/calender")
 public class CalenderController {
 
     private final CalenderService calendarService;
