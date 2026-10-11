@@ -1,50 +1,125 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
-  FaCalendarAlt,
   FaPlus,
   FaSearch,
-  FaClock,
+  FaTrash,
   FaEdit,
-  FaTrash
+  FaCalendarAlt,
 } from "react-icons/fa";
 
-export default function Calender() {
+import {
+  getEvents,
+  createEvent,
+  updateEvent,
+  deleteEvent,
+} from "../../services/calendarService";
+
+export default function Calendar() {
+  const [events, setEvents] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const [search, setSearch] = useState("");
 
-  const events = [
-    {
-      id: 1,
-      title: "DBMS Lab",
-      date: "15 Oct 2026",
-      time: "10:00 AM"
-    },
-    {
-      id: 2,
-      title: "AI Assignment Submission",
-      date: "18 Oct 2026",
-      time: "11:59 PM"
-    },
-    {
-      id: 3,
-      title: "Operating Systems Quiz",
-      date: "20 Oct 2026",
-      time: "09:30 AM"
-    },
-    {
-      id: 4,
-      title: "Mini Project Review",
-      date: "24 Oct 2026",
-      time: "02:00 PM"
-    }
-  ];
+  const [showModal, setShowModal] = useState(false);
 
-  const filteredEvents = events.filter(event =>
-    event.title.toLowerCase().includes(search.toLowerCase())
+  const [editingEvent, setEditingEvent] = useState(null);
+
+  const [newEvent, setNewEvent] = useState({
+    title: "",
+    description: "",
+    eventDate: "",
+    eventType: "General",
+  });
+
+  useEffect(() => {
+    loadEvents();
+  }, []);
+
+  const loadEvents = async () => {
+    try {
+      const response = await getEvents();
+      setEvents(response.data);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSave = async () => {
+    if (
+      !newEvent.title ||
+      !newEvent.eventDate ||
+      !newEvent.eventType
+    ) {
+      alert("Please fill all required fields.");
+      return;
+    }
+
+    try {
+      if (editingEvent) {
+        await updateEvent(editingEvent.id, newEvent);
+      } else {
+        await createEvent(newEvent);
+      }
+
+      loadEvents();
+
+      setShowModal(false);
+
+      setEditingEvent(null);
+
+      setNewEvent({
+        title: "",
+        description: "",
+        eventDate: "",
+        eventType: "General",
+      });
+    } catch (err) {
+      console.error(err);
+      alert("Operation failed.");
+    }
+  };
+
+  const handleDelete = async (id) => {
+    if (!window.confirm("Delete this event?")) return;
+
+    try {
+      await deleteEvent(id);
+      loadEvents();
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const handleEdit = (event) => {
+    setEditingEvent(event);
+
+    setNewEvent({
+      title: event.title,
+      description: event.description,
+      eventDate: event.eventDate,
+      eventType: event.eventType,
+    });
+
+    setShowModal(true);
+  };
+
+  const filteredEvents = events.filter(
+    (event) =>
+      event.title.toLowerCase().includes(search.toLowerCase()) ||
+      event.eventType.toLowerCase().includes(search.toLowerCase())
   );
 
-  return (
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-slate-950 flex justify-center items-center text-white text-2xl">
+        Loading Events...
+      </div>
+    );
+  }
 
+  return (
     <div className="min-h-screen bg-slate-950 text-white p-8">
 
       <div className="flex justify-between items-center mb-8">
@@ -56,17 +131,28 @@ export default function Calender() {
           </h1>
 
           <p className="text-gray-400 mt-2">
-            Manage your academic schedule.
+            Manage your events.
           </p>
 
         </div>
 
-        <button className="flex items-center gap-2 bg-cyan-500 hover:bg-cyan-600 px-5 py-3 rounded-lg transition">
+        <button
+          onClick={() => {
+            setEditingEvent(null);
 
+            setNewEvent({
+              title: "",
+              description: "",
+              eventDate: "",
+              eventType: "General",
+            });
+
+            setShowModal(true);
+          }}
+          className="bg-cyan-500 hover:bg-cyan-600 px-5 py-3 rounded-lg flex items-center gap-2"
+        >
           <FaPlus />
-
           Add Event
-
         </button>
 
       </div>
@@ -79,19 +165,19 @@ export default function Calender() {
           type="text"
           placeholder="Search Events..."
           value={search}
-          onChange={(e)=>setSearch(e.target.value)}
-          className="w-full bg-slate-800 border border-slate-700 rounded-lg py-3 pl-12 pr-4 outline-none focus:border-cyan-400"
+          onChange={(e) => setSearch(e.target.value)}
+          className="w-full bg-slate-800 border border-slate-700 rounded-lg py-3 pl-12 pr-4 outline-none"
         />
 
       </div>
 
-      <div className="space-y-5">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
 
-        {filteredEvents.map(event=>(
+        {filteredEvents.map((event) => (
 
           <div
             key={event.id}
-            className="bg-slate-900 rounded-xl border border-slate-800 hover:border-cyan-500 p-6 transition duration-300"
+            className="bg-slate-900 rounded-xl p-6 border border-slate-800 hover:border-cyan-500 transition"
           >
 
             <div className="flex justify-between">
@@ -102,37 +188,51 @@ export default function Calender() {
                   {event.title}
                 </h2>
 
-                <div className="flex items-center gap-3 mt-4 text-gray-400">
-
-                  <FaCalendarAlt />
-
-                  {event.date}
-
-                </div>
-
-                <div className="flex items-center gap-3 mt-2 text-gray-400">
-
-                  <FaClock />
-
-                  {event.time}
-
-                </div>
+                <p className="text-gray-400 mt-2">
+                  {event.description}
+                </p>
 
               </div>
 
-              <div className="flex gap-5 text-xl">
+              <div className="flex gap-3">
 
-                <button className="text-cyan-400 hover:text-cyan-300">
-
+                <button
+                  onClick={() => handleEdit(event)}
+                  className="text-cyan-400"
+                >
                   <FaEdit />
-
                 </button>
 
-                <button className="text-red-400 hover:text-red-300">
-
+                <button
+                  onClick={() => handleDelete(event.id)}
+                  className="text-red-400"
+                >
                   <FaTrash />
-
                 </button>
+
+              </div>
+
+            </div>
+
+            <div className="mt-5 flex justify-between">
+
+              <div>
+
+                <p className="text-gray-500">
+                  Date
+                </p>
+
+                <p>{event.eventDate}</p>
+
+              </div>
+
+              <div>
+
+                <p className="text-gray-500">
+                  Type
+                </p>
+
+                <p>{event.eventType}</p>
 
               </div>
 
@@ -144,13 +244,13 @@ export default function Calender() {
 
       </div>
 
-      {filteredEvents.length===0 &&(
+      {filteredEvents.length === 0 && (
 
         <div className="text-center mt-20">
 
-          <FaCalendarAlt className="text-6xl text-gray-600 mx-auto"/>
+          <FaCalendarAlt className="text-6xl mx-auto text-gray-600" />
 
-          <h2 className="text-2xl mt-5">
+          <h2 className="text-2xl mt-6">
             No Events Found
           </h2>
 
@@ -158,8 +258,95 @@ export default function Calender() {
 
       )}
 
+      {showModal && (
+
+        <div className="fixed inset-0 bg-black/70 flex justify-center items-center z-50">
+
+          <div className="bg-slate-900 rounded-xl p-6 w-full max-w-lg">
+
+            <h2 className="text-2xl font-bold mb-6">
+              {editingEvent ? "Edit Event" : "Create Event"}
+            </h2>
+
+            <input
+              type="text"
+              placeholder="Title"
+              value={newEvent.title}
+              onChange={(e) =>
+                setNewEvent({
+                  ...newEvent,
+                  title: e.target.value,
+                })
+              }
+              className="w-full bg-slate-800 p-3 rounded-lg mb-4"
+            />
+
+            <textarea
+              rows={4}
+              placeholder="Description"
+              value={newEvent.description}
+              onChange={(e) =>
+                setNewEvent({
+                  ...newEvent,
+                  description: e.target.value,
+                })
+              }
+              className="w-full bg-slate-800 p-3 rounded-lg mb-4"
+            />
+
+            <input
+              type="date"
+              value={newEvent.eventDate}
+              onChange={(e) =>
+                setNewEvent({
+                  ...newEvent,
+                  eventDate: e.target.value,
+                })
+              }
+              className="w-full bg-slate-800 p-3 rounded-lg mb-4"
+            />
+
+            <select
+              value={newEvent.eventType}
+              onChange={(e) =>
+                setNewEvent({
+                  ...newEvent,
+                  eventType: e.target.value,
+                })
+              }
+              className="w-full bg-slate-800 p-3 rounded-lg mb-6"
+            >
+              <option>General</option>
+              <option>Exam</option>
+              <option>Assignment</option>
+              <option>Meeting</option>
+              <option>Holiday</option>
+            </select>
+
+            <div className="flex justify-end gap-3">
+
+              <button
+                onClick={() => setShowModal(false)}
+                className="bg-gray-600 px-5 py-2 rounded-lg"
+              >
+                Cancel
+              </button>
+
+              <button
+                onClick={handleSave}
+                className="bg-cyan-500 px-5 py-2 rounded-lg"
+              >
+                {editingEvent ? "Update" : "Save"}
+              </button>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      )}
+
     </div>
-
   );
-
 }
