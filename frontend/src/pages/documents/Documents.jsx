@@ -214,7 +214,7 @@ export default function Documents() {
                             <div className="flex items-center gap-3 flex-wrap">
 
     <a
-        href={`http://localhost:8080${doc.fileUrl}`}
+        href={`${(import.meta.env.VITE_BACKEND_URL || "http://localhost:8080").replace(/\/+$/, '')}${doc.fileUrl}`}
         target="_blank"
         rel="noopener noreferrer"
         className="flex items-center gap-2 bg-cyan-500 hover:bg-cyan-600 px-4 py-2 rounded-lg transition"
