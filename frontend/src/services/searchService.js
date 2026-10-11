@@ -1,7 +1,7 @@
-import api from "./api";
+import axiosConfig from "../api/axiosConfig";
 
 export const search = async (keyword) => {
-    const response = await api.get("/search", {
+    const response = await axiosConfig.get("/search", {
         params: {
             keyword,
         },

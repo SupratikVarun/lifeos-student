@@ -11,6 +11,7 @@ import Documents from "./pages/documents/Documents";
 import ChatWithPDF from "./pages/ai/ChatWithPDF";
 import MainLayout from "./components/layout/MainLayout";
 import KnowledgeGraph from "./pages/knowledgegraph/KnowledgeGraph";
+import SmartSearchPage from "./pages/SmartSearchPage";
 
 function App() {
   return (
@@ -18,7 +19,8 @@ function App() {
       <Routes>
 
         <Route path="/" element={<Login />} />
-<Route path="/register" element={<Register />} />
+        <Route path="/register" element={<Register />} />
+
         <Route element={<MainLayout />}>
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/subjects" element={<Subjects />} />
@@ -26,14 +28,10 @@ function App() {
           <Route path="/tasks" element={<Tasks />} />
           <Route path="/calendar" element={<Calendar />} />
           <Route path="/documents" element={<Documents />} />
-
+          <Route path="/search" element={<SmartSearchPage />} />
           <Route path="/chat/:id" element={<ChatWithPDF />} />
           <Route path="/ai/:id" element={<ChatWithPDF />} />
-         <Route
-    path="/knowledge-graph/:id"
-    element={<KnowledgeGraph />}
-/>
-
+          <Route path="/knowledge-graph/:id" element={<KnowledgeGraph />} />
         </Route>
 
       </Routes>
