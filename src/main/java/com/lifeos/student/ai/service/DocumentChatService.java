@@ -38,6 +38,10 @@ public class DocumentChatService {
                     .build();
         }
 
+        System.out.println("========== PDF TEXT ==========");
+        System.out.println(document.getExtractedText());
+        System.out.println("==============================");
+
         AIRequestDTO aiRequest = new AIRequestDTO();
 
         aiRequest.setProvider(ProviderType.GEMINI);

@@ -55,7 +55,13 @@ public class PDFServiceImpl implements PDFService {
 
             PDFTextStripper stripper = new PDFTextStripper();
 
-            return stripper.getText(document);
+            String text = stripper.getText(document);
+
+            System.out.println("=========== PDF TEXT ===========");
+            System.out.println(text);
+            System.out.println("================================");
+
+            return text;
 
         } catch (IOException e) {
 
