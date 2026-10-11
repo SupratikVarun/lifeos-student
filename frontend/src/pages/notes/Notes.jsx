@@ -36,6 +36,10 @@ export default function Notes() {
   });
 
   useEffect(() => {
+    console.log("showModal =", showModal);
+}, [showModal]);
+
+  useEffect(() => {
     loadNotes();
     loadSubjects();
   }, []);
@@ -124,6 +128,9 @@ export default function Notes() {
     note.title.toLowerCase().includes(search.toLowerCase()) ||
     note.content.toLowerCase().includes(search.toLowerCase())
   );
+
+  console.log("Notes component rendered");
+console.log("showModal =", showModal);
 
   if (loading) {
     return (
