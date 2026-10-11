@@ -1,27 +1,25 @@
-# Build stage with JDK 21
-FROM eclipse-temurin:21-jdk-jammy AS builder
+# ---------- Build Stage ----------
+FROM maven:3.9.10-eclipse-temurin-21 AS builder
+
 WORKDIR /app
 
-# Copy Maven wrapper and pom.xml
-COPY .mvn/ .mvn/
-COPY mvnw pom.xml ./
-RUN chmod +x ./mvnw
+COPY pom.xml .
 
-# Copy source code and build production jar
-COPY src/ src/
-RUN ./mvnw clean package -DskipTests
+COPY src ./src
 
-# Runtime stage with lightweight JRE 21
-FROM eclipse-temurin:21-jre-jammy
+RUN mvn clean package -DskipTests
+
+# ---------- Runtime ----------
+FROM eclipse-temurin:21-jre
+
 WORKDIR /app
 
-# Ensure uploads directory exists
 RUN mkdir -p uploads
 
-# Copy compiled jar
-COPY --from=builder /app/target/lifeos-student-backend-*.jar app.jar
+COPY --from=builder /app/target/*.jar app.jar
 
 ENV PORT=8080
+
 EXPOSE 8080
 
-ENTRYPOINT ["sh", "-c", "java -Dserver.port=${PORT} -jar app.jar"]
+ENTRYPOINT ["sh","-c","java -Dserver.port=$PORT -jar app.jar"]
