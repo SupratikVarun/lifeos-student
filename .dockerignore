@@ -1,0 +1,32 @@
+# Git metadata
+.git
+.gitignore
+.gitattributes
+
+# IDE / editor
+.idea
+.vscode
+*.iml
+*.ipr
+*.iws
+
+# Maven build output — never copy target/ into Docker context
+target/
+
+# Frontend — not needed for backend build
+frontend/
+
+# Docs, database scripts, etc. — not needed at runtime
+docs/
+database/
+README.md
+
+# OS artifacts
+.DS_Store
+Thumbs.db
+
+# Uploaded files — mounted at runtime, not baked into image
+uploads/
+
+# CI / deploy config (not needed inside the image)
+render.yaml

@@ -5,9 +5,7 @@ import {
     FaTasks,
     FaCalendarAlt,
     FaFilePdf,
-    FaProjectDiagram,
     FaSearch,
-    FaRobot
 } from "react-icons/fa";
 
 import { Link, useLocation } from "react-router-dom";
@@ -24,9 +22,7 @@ export default function Sidebar() {
         { icon: <FaTasks />, text: "Tasks", path: "/tasks" },
         { icon: <FaCalendarAlt />, text: "Calendar", path: "/calendar" },
         { icon: <FaFilePdf />, text: "Documents", path: "/documents" },
-        { icon: <FaProjectDiagram />, text: "Knowledge Graph", path: "/knowledgegraph" },
         { icon: <FaSearch />, text: "Smart Search", path: "/search" },
-        { icon: <FaRobot />, text: "AI Assistant", path: "/ai" }
 
     ];
 
