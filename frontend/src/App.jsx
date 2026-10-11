@@ -28,6 +28,7 @@ function App() {
           <Route path="/documents" element={<Documents />} />
 
           <Route path="/chat/:id" element={<ChatWithPDF />} />
+          <Route path="/ai/:id" element={<ChatWithPDF />} />
          <Route
     path="/knowledge-graph/:id"
     element={<KnowledgeGraph />}

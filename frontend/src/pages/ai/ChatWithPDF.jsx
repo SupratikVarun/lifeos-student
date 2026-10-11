@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axiosConfig from "../../api/axiosConfig";
 import ReactMarkdown from "react-markdown";
