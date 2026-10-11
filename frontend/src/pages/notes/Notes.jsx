@@ -11,6 +11,7 @@ import {
 import {
   getNotes,
   createNote,
+  updateNote,
   deleteNote,
 } from "../../services/notesService";
 
@@ -27,6 +28,10 @@ export default function Notes() {
   const [loading, setLoading] = useState(true);
 
   const [showModal, setShowModal] = useState(false);
+
+  const [isEditing, setIsEditing] = useState(false);
+
+const [editingId, setEditingId] = useState(null);
 
   const [newNote, setNewNote] = useState({
     title: "",
@@ -64,6 +69,23 @@ export default function Notes() {
     }
   };
 
+  const handleEdit = (note) => {
+
+    setIsEditing(true);
+
+    setEditingId(note.id);
+
+    setNewNote({
+        title: note.title,
+        content: note.content,
+        fileUrl: note.fileUrl || "",
+        subjectId: note.subjectId,
+    });
+
+    setShowModal(true);
+
+};
+
   const handleCreateNote = async () => {
 
     if (
@@ -80,6 +102,10 @@ export default function Notes() {
       await createNote(newNote);
 
       setShowModal(false);
+
+      setIsEditing(false);
+
+setEditingId(null);
 
       setNewNote({
         title: "",
@@ -99,6 +125,37 @@ export default function Notes() {
     }
 
   };
+
+  const handleUpdateNote = async () => {
+
+    try {
+
+        await updateNote(editingId, newNote);
+
+        setShowModal(false);
+
+        setIsEditing(false);
+
+        setEditingId(null);
+
+        setNewNote({
+            title: "",
+            content: "",
+            fileUrl: "",
+            subjectId: "",
+        });
+
+        loadNotes();
+
+    } catch (err) {
+
+        console.error(err);
+
+        alert("Failed to update note.");
+
+    }
+
+};
 
   const handleDelete = async (id) => {
 
@@ -215,11 +272,12 @@ console.log("showModal =", showModal);
 
             <div className="flex gap-3">
 
-              <button className="text-cyan-400 hover:text-cyan-300">
-
-                <FaEdit />
-
-              </button>
+             <button
+    onClick={() => handleEdit(note)}
+    className="text-cyan-400 hover:text-cyan-300"
+>
+    <FaEdit />
+</button>
 
               <button
                 onClick={() => handleDelete(note.id)}
@@ -346,16 +404,12 @@ console.log("showModal =", showModal);
                 Cancel
 
               </button>
-
-              <button
-                onClick={handleCreateNote}
-                className="px-5 py-2 rounded-lg bg-cyan-500 hover:bg-cyan-600"
-              >
-
-                Save Note
-
-              </button>
-
+<button
+  onClick={isEditing ? handleUpdateNote : handleCreateNote}
+  className="px-5 py-2 rounded-lg bg-cyan-500 hover:bg-cyan-600"
+>
+  {isEditing ? "Update Note" : "Save Note"}
+</button>
             </div>
 
           </div>

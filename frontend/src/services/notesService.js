@@ -39,3 +39,7 @@ export const uploadDocument = (file) => {
 export const deleteDocument = (id) => {
     return axiosConfig.delete(`/documents/${id}`);
 };
+
+export const updateNote = (id, note) => {
+    return axiosConfig.put(`/notes/${id}`, note);
+};
