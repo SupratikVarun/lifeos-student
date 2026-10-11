@@ -151,15 +151,13 @@ export default function Notes() {
     </div>
 
     <button
-      onClick={() => setShowModal(true)}
-      className="bg-cyan-500 hover:bg-cyan-600 px-5 py-3 rounded-lg flex items-center gap-2 transition"
-    >
-
-      <FaPlus />
-
-      Create Note
-
-    </button>
+  onClick={() => {
+    console.log("Button clicked");
+    setShowModal(true);
+  }}
+>
+  Create Note
+</button>
 
   </div>
 
