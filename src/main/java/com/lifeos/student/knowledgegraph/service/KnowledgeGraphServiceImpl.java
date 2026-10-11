@@ -55,6 +55,10 @@ public class KnowledgeGraphServiceImpl implements KnowledgeGraphService {
         AIResponseDTO response =
                 aiManagerService.generateKnowledgeGraph(request);
 
+        System.out.println("============== AI RESPONSE ==============");
+        System.out.println(response.getResponse());
+        System.out.println("=========================================");
+
         KnowledgeGraphDTO graph;
 
         try {
