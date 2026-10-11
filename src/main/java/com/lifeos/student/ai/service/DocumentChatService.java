@@ -29,6 +29,15 @@ public class DocumentChatService {
                 email
         );
 
+        if (document.getExtractedText() == null || document.getExtractedText().trim().isEmpty()) {
+            return AIResponseDTO.builder()
+                    .provider("System")
+                    .response("⚠️ **No readable text found in this document.**\n\nThis PDF appears to be a scanned image or photograph of notes without selectable digital text. Apache PDFBox cannot extract text from pure images.\n\n💡 **Tip:** To chat with AI, please upload a digital PDF containing selectable text (such as typed notes, lecture slides, or exported documents).")
+                    .fallbackUsed(false)
+                    .processingTime(0)
+                    .build();
+        }
+
         AIRequestDTO aiRequest = new AIRequestDTO();
 
         aiRequest.setProvider(ProviderType.GEMINI);
