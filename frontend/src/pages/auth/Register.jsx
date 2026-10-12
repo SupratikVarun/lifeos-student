@@ -7,12 +7,15 @@ const Register = () => {
     const navigate = useNavigate();
 
     const [form, setForm] = useState({
-        fullName: "",
-        collegeEmail: "",
-        hallTicketNumber: "",
-        password: "",
-        confirmPassword: ""
-    });
+    fullName: "",
+    collegeEmail: "",
+    hallTicketNumber: "",
+    college: "",
+    branch: "",
+    year: "",
+    password: "",
+    confirmPassword: ""
+});
 
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
@@ -39,11 +42,14 @@ const Register = () => {
         try {
 
             await register({
-                fullName: form.fullName,
-                collegeEmail: form.collegeEmail,
-                hallTicketNumber: form.hallTicketNumber,
-                password: form.password
-            });
+    fullName: form.fullName,
+    collegeEmail: form.collegeEmail,
+    hallTicketNumber: form.hallTicketNumber,
+    college: form.college,
+    branch: form.branch,
+    year: Number(form.year),
+    password: form.password
+});
 
             alert("Registration Successful");
 
@@ -108,6 +114,35 @@ const Register = () => {
                         onChange={handleChange}
                         className="w-full p-3 rounded-lg bg-slate-800 text-white outline-none"
                     />
+
+                    <input
+    type="text"
+    name="college"
+    placeholder="College Name"
+    value={form.college}
+    onChange={handleChange}
+    className="w-full p-3 rounded-lg bg-slate-800 text-white outline-none"
+/>
+
+<input
+    type="text"
+    name="branch"
+    placeholder="Branch"
+    value={form.branch}
+    onChange={handleChange}
+    className="w-full p-3 rounded-lg bg-slate-800 text-white outline-none"
+/>
+
+<input
+    type="number"
+    name="year"
+    placeholder="Year"
+    min="1"
+    max="4"
+    value={form.year}
+    onChange={handleChange}
+    className="w-full p-3 rounded-lg bg-slate-800 text-white outline-none"
+/>
 
                     <input
                         type="password"
